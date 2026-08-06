@@ -1,5 +1,7 @@
 const shareButton = document.getElementById('shareButton');
 const statusEl = document.getElementById('status');
+const dashboardLink = document.getElementById('dashboardLink');
+const dashboardLinkContainer = document.getElementById('dashboardLinkContainer');
 
 function getBrowserInfo() {
   const userAgent = navigator.userAgent;
@@ -37,10 +39,16 @@ async function shareLocation() {
         osInfo: parseOsInfo()
       };
 
+      const savedToken = localStorage.getItem('dashboardToken');
+      if (savedToken) {
+        payload.sessionToken = savedToken;
+      }
+
       statusEl.textContent = 'Sending location to server...';
 
       try {
-        const response = await fetch('/share-location', {
+        const baseUrl = window.API_BASE_URL || '';
+        const response = await fetch(`${baseUrl}/share-location`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -51,8 +59,14 @@ async function shareLocation() {
           throw new Error(result.error || 'Server error');
         }
 
-        statusEl.textContent = 'Location shared successfully. Open the dashboard to view it.';
+        localStorage.setItem('dashboardToken', result.token);
+        const dashboardUrl = `dashboard.html?token=${encodeURIComponent(result.token)}`;
+        dashboardLink.href = dashboardUrl;
+        dashboardLinkContainer.classList.remove('hidden');
+
+        statusEl.textContent = 'Location shared successfully. Open the dashboard to view live updates.';
       } catch (error) {
+        dashboardLinkContainer.classList.add('hidden');
         statusEl.textContent = `Failed to share location: ${error.message}`;
       }
     },
@@ -69,6 +83,12 @@ async function shareLocation() {
       maximumAge: 0
     }
   );
+}
+
+const initialToken = localStorage.getItem('dashboardToken');
+if (initialToken) {
+  dashboardLink.href = `dashboard.html?token=${encodeURIComponent(initialToken)}`;
+  dashboardLinkContainer.classList.remove('hidden');
 }
 
 shareButton.addEventListener('click', shareLocation);
