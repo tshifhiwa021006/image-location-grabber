@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Location Dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+e2dEk4xMJk6J4nM6o2Zu0rxw5Q2f6xBvP0H+Zk+M=" crossorigin="" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>Location Dashboard</h1>
+    <p>Locations are shown only after browser consent and explicit share actions.</p>
+    <div id="map" class="map"></div>
+    <section id="sidebar" class="sidebar">
+      <h2>Recent shares</h2>
+      <ul id="locationsList"></ul>
+    </section>
+    <div class="links">
+      <a href="index.html">Back to consent page</a>
+    </div>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j7k8fGPggtYg5kA7f6fP6m9A3rFQubQU5jEU8+M=" crossorigin=""></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
